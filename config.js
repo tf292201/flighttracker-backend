@@ -10,7 +10,7 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyCryzhZ25zwrDWi-qZfI3FjeiXn417So-0"
 function getDatabaseUri() {
     return (process.env.NODE_ENV === "test")
         ? "postgresql://flight:tracker@localhost/flight_tracker_test"
-        : process.env.DATABASE_URL || "postgresql://flight:tracker@localhost/flight_tracker";
+        : process.env.DATABASE_URL || "postgresql://postgres.dxzlinzcqvgppzjvsoxb:s9BGqis9wq721f2D@aws-0-us-west-1.pooler.supabase.com:6543/postgres";
   }
 
 const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === 'test' ? 1 : 12;
