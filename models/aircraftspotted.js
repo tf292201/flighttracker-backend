@@ -27,6 +27,44 @@ class Aircraft {
           throw new Error('Error fetching spotted flights: ' + error.message);
         }
     }
+    static async findByIcao24(icao24) {
+      try {
+          // First query to get data from MASTER34
+          const query1 = `
+              SELECT * 
+              FROM "MASTER34"
+              WHERE TRIM("MODE S CODE HEX") ILIKE $1;
+          `;
+          const { rows: masterRows } = await db.query(query1, [icao24]);
+
+
+
+          if (masterRows.length === 0) {
+              return null; // If no row is found
+          }
+
+          const masterRow = masterRows[0];
+
+          // Extract MFR MDL CODE from the first query's result
+          const mfrMdlCode = masterRow['MFR MDL CODE'];
+
+          // Second query to get data from ACFTREF using MFR MDL CODE
+          const query2 = `
+              SELECT * 
+              FROM "ACFTREF"
+              WHERE "CODE" = $1;
+          `;
+          const { rows: acftrefRows } = await db.query(query2, [mfrMdlCode]);
+            console.log(acftrefRows);
+            console.log(masterRow);
+          return {
+              masterRow,
+              acftrefRow: acftrefRows[0] || null // Return the first row or null if not found
+          };
+      } catch (error) {
+          throw new Error('Error finding aircraft by ICAO24: ' + error.message);
+      }
+  }
 }
 
 module.exports = Aircraft;
