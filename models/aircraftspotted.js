@@ -65,6 +65,14 @@ class Aircraft {
           throw new Error('Error finding aircraft by ICAO24: ' + error.message);
       }
   }
+
+  static async removeAll() {
+    try {
+        await db.query('DELETE FROM flights');
+    } catch (error) {
+        throw new Error('Error removing all flights: ' + error.message);
+    }
+}
 }
 
 module.exports = Aircraft;

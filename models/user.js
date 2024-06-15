@@ -103,5 +103,13 @@ class User {
           throw error;
         }
     }
+
+    static async removeAll() {
+        try {
+            await db.query(`DELETE FROM users`);
+        } catch (error) {
+            throw new Error('Error removing users');
+        }
+    }
 }
  module.exports = User;

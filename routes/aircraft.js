@@ -6,7 +6,6 @@ const jsonschema = require('jsonschema');
 const Aircraft = require('../models/aircraftspotted');
 const User = require('../models/user');
 const favoriteFlightSchema = require('../schemas/favoriteFlightSchema.json');
-const { searchInColumn } = require('../helpers/getFaaInfo');
 const { getPlanePhoto } = require('../helpers/getPhoto');
 
 /////////////////////////////////////////////////////////////////
