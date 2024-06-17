@@ -66,6 +66,25 @@ class Aircraft {
       }
   }
 
+  static async removeFlight(userId, callsign) {
+    const flightCallSign = await db.query('SELECT id FROM flights WHERE callsign = $1',
+        [callsign]
+      );
+      if (flightCallSign.rows.length === 0) {
+        throw new Error('Flight not found');
+      }
+      const flightId = flightCallSign.rows[0].id;
+
+      const deleteResult = await db.query('DELETE FROM user_flights WHERE user_id = $1 AND flight_id = $2 RETURNING *',
+        [userId, flightId]
+      );
+      if (deleteResult.rows.length === 0) {
+        throw new Error('Flight not found');
+      }
+      return deleteResult.rows[0];
+    }
+    
+    
   static async removeAll() {
     try {
         await db.query('DELETE FROM flights');
