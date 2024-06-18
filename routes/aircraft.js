@@ -69,9 +69,26 @@ router.get('/', async (req, res) => {
   }
 });
 
+
+router.post('/delete', async (req, res) => {
+  const { callsign } = req.body;
+  try {
+    const username = res.locals.user.username;
+    const userId = await User.getUserIdByUsername(username);
+    console.log(userId);
+    console.log(callsign);
+    const deletedFlight = await Aircraft.removeFlight(userId, callsign);
+  
+    res.json(deletedFlight);
+  } catch (error) {
+    console.error('Error deleting spotted aircraft:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 // Define route to fetch specific information on single aircraft
 // This route fetches information from two FAA files and a third-party API
-
 router.get('/focus', async (req, res) => {
   try {
     const { icao24 } = req.query;
