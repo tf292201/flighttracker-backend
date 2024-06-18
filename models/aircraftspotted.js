@@ -65,25 +65,20 @@ class Aircraft {
           throw new Error('Error finding aircraft by ICAO24: ' + error.message);
       }
   }
-
   static async removeFlight(userId, callsign) {
-    const flightCallSign = await db.query('SELECT id FROM flights WHERE callsign = $1',
-        [callsign]
-      );
-      if (flightCallSign.rows.length === 0) {
-        throw new Error('Flight not found');
-      }
-      const flightId = flightCallSign.rows[0].id;
-
-      const deleteResult = await db.query('DELETE FROM user_flights WHERE user_id = $1 AND flight_id = $2 RETURNING *',
-        [userId, flightId]
-      );
+    try {
+      // Step 1: Delete the flight from the flights table where user_id and callsign match
+      const deleteResult = await db.query('DELETE FROM flights WHERE user_id = $1 AND callsign = $2 RETURNING *', [userId, callsign]);
+  
       if (deleteResult.rows.length === 0) {
-        throw new Error('Flight not found');
+        throw new Error('Flight not found for the user');
       }
-      return deleteResult.rows[0];
+  
+      return deleteResult.rows[0]; // Return the deleted flight entry
+    } catch (error) {
+      throw new Error('Error deleting spotted aircraft: ' + error.message);
     }
-    
+  }
     
   static async removeAll() {
     try {
