@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001;
 function getDatabaseUri() {
     return (process.env.NODE_ENV === "test")
         ? "postgresql://flight:tracker@localhost/flight_tracker_test"
-        : process.env.DATABASE_URL || "postgresql://postgres.dxzlinzcqvgppzjvsoxb:s9BGqis9wq721f2D@aws-0-us-west-1.pooler.supabase.com:6543/postgres";
+        : process.env.DATABASE_URL || "postgresql://postgres.eqzqckkcmkdwqcferswp:F43sNnUyjfXKvjhs@aws-0-us-west-1.pooler.supabase.com:6543/postgres";
   }
 
 const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === 'test' ? 1 : 12;
